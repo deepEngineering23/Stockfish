@@ -332,7 +332,32 @@ void Search::Worker::iterative_deepening() {
                 // and we want to keep the same order for all the moves except the
                 // new PV that goes to the front. Note that in the case of MultiPV
                 // search the already searched PV lines are preserved.
+
+                auto moveget = main_manager();
+
+                sync_cout<<"-----------"<< sync_endl;
+
+                for (size_t i = 0; i < multiPV; ++i)
+                {
+                    for (Move m : rootMoves[i].pv)
+                        sync_cout << " " << UCI::move(m,moveget)<<sync_endl;
+                }
+
+                sync_cout<<"-----------"<< sync_endl;
+
                 std::stable_sort(rootMoves.begin() + pvIdx, rootMoves.begin() + pvLast);
+
+                sync_cout<< "value:"<< pvIdx<<" "<<pvLast<<sync_endl;
+
+                sync_cout<<"-----------"<< sync_endl;
+                auto movegetone = main_manager();
+                for (size_t i = 0; i < multiPV; ++i)
+                {
+                    for (Move m : rootMoves[i].pv)
+                        sync_cout << " " << UCI::move(m,movegetone)<<sync_endl;
+                }
+
+                sync_cout<<"-----------"<< sync_endl;
 
                 // If search has been stopped, we break immediately. Sorting is
                 // safe because RootMoves is still valid, although it refers to
