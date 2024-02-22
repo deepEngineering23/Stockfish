@@ -316,8 +316,16 @@ void Search::Worker::iterative_deepening() {
                 // for every four searchAgain steps (see issue #2717).
                 Depth adjustedDepth =
                   std::max(1, rootDepth - failedHighCnt - 3 * (searchAgainCounter + 1) / 4);
-                bestValue = search<Root>(rootPos, ss, alpha, beta, adjustedDepth, false);
 
+                sync_cout << "node:"<<alpha<<" "<<beta << sync_endl;
+
+                bestValue = search<Root>(rootPos, ss, alpha, beta, adjustedDepth, false);
+                sync_cout << "value: " << bestValue<< sync_endl;
+                /*
+                position startpos
+                position fen r2q1rk1/p2bbppp/Q7/2p1P2P/8/2p1B3/PPP2P1P/2KR3R w - - 0 17
+                go infinite
+                */
                 // Bring the best move to the front. It is critical that sorting
                 // is done with a stable algorithm because all the values but the
                 // first and eventually the new best one is set to -VALUE_INFINITE
@@ -1350,7 +1358,6 @@ moves_loop:  // When in check, search starts here
     }
 
     assert(bestValue > -VALUE_INFINITE && bestValue < VALUE_INFINITE);
-
     return bestValue;
 }
 
