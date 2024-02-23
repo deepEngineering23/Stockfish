@@ -341,6 +341,8 @@ void Search::Worker::iterative_deepening() {
                 {
                     for (Move m : rootMoves[i].pv)
                         sync_cout << " " << UCI::move(m,moveget)<<sync_endl;
+
+                    sync_cout << "========== "<<sync_endl;
                 }
 
                 sync_cout<<"-----------"<< sync_endl;
@@ -355,6 +357,7 @@ void Search::Worker::iterative_deepening() {
                 {
                     for (Move m : rootMoves[i].pv)
                         sync_cout << " " << UCI::move(m,movegetone)<<sync_endl;
+                    sync_cout << "========== "<<sync_endl;
                 }
 
                 sync_cout<<"-----------"<< sync_endl;
@@ -551,6 +554,32 @@ Value Search::Worker::search(
         if (alpha >= beta)
             return alpha;
     }
+    /*
+    important values for conditions
+
+    Value    bestValue, value, ttValue, eval, maxValue, probCutBeta;
+    bool     givesCheck, improving, priorCapture;
+    bool     capture, moveCountPruning, ttCapture;
+    int      moveCount, captureCount, quietCount;
+
+    
+    {
+        Move*           pv;
+        PieceToHistory* continuationHistory;
+        int             ply;
+        Move            currentMove;
+        Move            excludedMove;
+        Move            killers[2];
+        Value           staticEval;
+        int             statScore;
+        int             moveCount;
+        bool            inCheck;
+        bool            ttPv;
+        bool            ttHit;
+        int             multipleExtensions;
+        int             cutoffCnt;
+    };
+    */
 
     assert(-VALUE_INFINITE <= alpha && alpha < beta && beta <= VALUE_INFINITE);
     assert(PvNode || (alpha == beta - 1));
