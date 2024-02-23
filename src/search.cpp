@@ -537,6 +537,22 @@ void Search::Worker::clear() {
 
 
 // Main search function for both PV and non-PV nodes.
+
+std::string binaryRaw(uint16_t dup) { 
+    
+    int i = 16;
+
+    std::string s="";
+    while(i--){
+        int k = dup%2;
+
+        s+=std::to_string(k);
+
+        dup = dup/2;
+    }
+    return s; 
+}
+
 template<NodeType nodeType>
 Value Search::Worker::search(
   Position& pos, Stack* ss, Value alpha, Value beta, Depth depth, bool cutNode) {
@@ -549,7 +565,7 @@ Value Search::Worker::search(
                 position fen r2q1rk1/p2bbppp/Q7/2p1P2P/8/2p1B3/PPP2P1P/2KR3R w - - 0 17
                 go infinite
                 */
-    sync_cout << " bitvalue: "<<ss->currentMove.raw()<<sync_endl;
+    sync_cout << " bitvalue: "<<binaryRaw(ss->currentMove.raw())<<sync_endl;
 
     // std::map<int,std::string> m1;
     // m1[0]="NO_PIECE";
