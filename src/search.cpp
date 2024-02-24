@@ -567,12 +567,19 @@ std::string binaryRaw(uint16_t dup) {
 }
 
 
-int freet = 0;
+int freet = 1;
 template<NodeType nodeType>
 Value Search::Worker::search(
   Position& pos, Stack* ss, Value alpha, Value beta, Depth depth, bool cutNode) {
 
     sync_cout << "board value initial"<<sync_endl;
+    if(nodeType == Root){
+        sync_cout << "Starting traversal after sleep"<<sync_endl;
+        sync_cout<<"Sleeping-----"<<sync_endl;
+        freet = 1;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    }
 
     std::string s = "";
     /*
@@ -608,14 +615,10 @@ Value Search::Worker::search(
         }
         
     }
+    
+
     freet++;
 
-    if(nodeType == Root){
-        sync_cout << "iiiiiiiiiiiiii"<<sync_endl;
-        sync_cout<<"Sleeping-----"<<sync_endl;
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-
-    }
 
     constexpr bool PvNode   = nodeType != NonPV;
     constexpr bool rootNode = nodeType == Root;
