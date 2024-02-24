@@ -580,7 +580,7 @@ Value Search::Worker::search(
         //std::this_thread::sleep_for(std::chrono::seconds(1));
 
     }
-
+    // use debugging functions of position class (overlooked)
     std::string s = "";
     /*
                 position startpos
