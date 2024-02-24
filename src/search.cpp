@@ -922,6 +922,8 @@ Value Search::Worker::search(
 
         pos.do_null_move(st, tt);
 
+        sync_cout << " Non PV node call 1"<<sync_endl;
+
         Value nullValue = -search<NonPV>(pos, ss + 1, -beta, -beta + 1, depth - R, !cutNode);
 
         pos.undo_null_move();
@@ -938,6 +940,7 @@ Value Search::Worker::search(
             // until ply exceeds nmpMinPly.
             thisThread->nmpMinPly = ss->ply + 3 * (depth - R) / 4;
 
+            sync_cout << " Non PV node call 2"<<sync_endl;
             Value v = search<NonPV>(pos, ss, beta - 1, beta, depth - R, false);
 
             thisThread->nmpMinPly = 0;
@@ -999,9 +1002,12 @@ Value Search::Worker::search(
                 value = -qsearch<NonPV>(pos, ss + 1, -probCutBeta, -probCutBeta + 1);
 
                 // If the qsearch held, perform the regular search
-                if (value >= probCutBeta)
+                if (value >= probCutBeta){
+                    sync_cout << " Non PV node call 3"<<sync_endl;
                     value = -search<NonPV>(pos, ss + 1, -probCutBeta, -probCutBeta + 1, depth - 4,
                                            !cutNode);
+                }
+                    
 
                 pos.undo_move(move);
 
@@ -1169,6 +1175,8 @@ moves_loop:  // When in check, search starts here
                 Depth singularDepth = newDepth / 2;
 
                 ss->excludedMove = move;
+                sync_cout << " Non PV node call 4"<<sync_endl;
+                    
                 value =
                   search<NonPV>(pos, ss, singularBeta - 1, singularBeta, singularDepth, cutNode);
                 ss->excludedMove = Move::none();
@@ -1285,6 +1293,7 @@ moves_loop:  // When in check, search starts here
             // std::clamp has been replaced by a more robust implementation.
             Depth d = std::max(1, std::min(newDepth - r, newDepth + 1));
 
+            sync_cout << " Non PV node call 5"<<sync_endl;
             value = -search<NonPV>(pos, ss + 1, -(alpha + 1), -alpha, d, true);
 
             // Do a full-depth search when reduced LMR search fails high
@@ -1297,9 +1306,13 @@ moves_loop:  // When in check, search starts here
 
                 newDepth += doDeeperSearch - doShallowerSearch;
 
-                if (newDepth > d)
+                if (newDepth > d){
+                    sync_cout << " Non PV node call 6"<<sync_endl;
+
                     value = -search<NonPV>(pos, ss + 1, -(alpha + 1), -alpha, newDepth, !cutNode);
 
+                }
+                    
                 // Post LMR continuation history updates (~1 Elo)
                 int bonus = value <= alpha ? -stat_malus(newDepth)
                           : value >= beta  ? stat_bonus(newDepth)
@@ -1315,7 +1328,8 @@ moves_loop:  // When in check, search starts here
             // Increase reduction if ttMove is not present (~1 Elo)
             if (!ttMove)
                 r += 2;
-
+            sync_cout << " Non PV node call 7"<<sync_endl;
+                    
             // Note that if expected reduction is high, we reduce search depth by 1 here (~9 Elo)
             value = -search<NonPV>(pos, ss + 1, -(alpha + 1), -alpha, newDepth - (r > 3), !cutNode);
         }
@@ -1327,6 +1341,8 @@ moves_loop:  // When in check, search starts here
             (ss + 1)->pv    = pv;
             (ss + 1)->pv[0] = Move::none();
 
+            sync_cout << " PV node call 8"<<sync_endl;
+                    
             value = -search<PV>(pos, ss + 1, -beta, -alpha, newDepth, false);
         }
 
