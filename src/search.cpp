@@ -538,6 +538,8 @@ void Search::Worker::clear() {
 
 // Main search function for both PV and non-PV nodes.
 
+std::string binaryRaw (uint16_t dup);
+
 std::string binaryRaw(uint16_t dup) { 
     
     int i = 16;
