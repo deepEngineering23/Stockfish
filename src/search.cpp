@@ -31,6 +31,10 @@
 #include <sstream>
 #include<string>
 #include<map>
+#include <iostream>
+#include <thread>
+#include <chrono>
+#include <cstdlib>
 
 #include "evaluate.h"
 #include "misc.h"
@@ -323,6 +327,13 @@ void Search::Worker::iterative_deepening() {
 
                 bestValue = search<Root>(rootPos, ss, alpha, beta, adjustedDepth, false);
                 sync_cout << "value: " << bestValue<< sync_endl;
+                if(bestValue == 0){
+
+                    sync_cout<<"Sleeping-----"<<sync_endl;
+                    std::this_thread::sleep_for(std::chrono::seconds(5));
+                    
+                    return ;
+                }
                 /*
                 position startpos
                 position fen r2q1rk1/p2bbppp/Q7/2p1P2P/8/2p1B3/PPP2P1P/2KR3R w - - 0 17
@@ -555,6 +566,8 @@ std::string binaryRaw(uint16_t dup) {
     return s; 
 }
 
+
+int freet = 0;
 template<NodeType nodeType>
 Value Search::Worker::search(
   Position& pos, Stack* ss, Value alpha, Value beta, Depth depth, bool cutNode) {
@@ -567,34 +580,41 @@ Value Search::Worker::search(
                 position fen r2q1rk1/p2bbppp/Q7/2p1P2P/8/2p1B3/PPP2P1P/2KR3R w - - 0 17
                 go infinite
                 */
-    sync_cout << " bitvalue: "<<binaryRaw(ss->currentMove.raw())<<sync_endl;
+    sync_cout << " bitvalue: "<<binaryRaw(ss->currentMove.raw())<< " " << binaryRaw(ss->excludedMove.raw())<<sync_endl;
+    sync_cout << "Values:" <<PawnValue <<" " <<freet<<sync_endl;
 
-    // std::map<int,std::string> m1;
-    // m1[0]="NO_PIECE";
-    // m1[1]="W_PAWN";   
-    // m1[2]="W_KNIGHT";
-    // m1[3]="W_BISHOP";
-    // m1[4]="W_ROOK";
-    // m1[5]="W_QUEEN";
-    // m1[6]="W_KING";
-    // m1[9]="B_PAWN"; 
-    // m1[10]="B_KNIGHT";
-    // m1[11]="B_BISHOP";
-    // m1[12]="B_ROOK";
-    // m1[13]="B_QUEEN";
-    // m1[14]="B_KING";
-    // m1[15]="PIECE_NB";
+    std::map<int,std::string> m1;
+    m1[0]="NO_PIECE";
+    m1[1]="W_PAWN";   
+    m1[2]="W_KNIGHT";
+    m1[3]="W_BISHOP";
+    m1[4]="W_ROOK";
+    m1[5]="W_QUEEN";
+    m1[6]="W_KING";
+    m1[9]="B_PAWN"; 
+    m1[10]="B_KNIGHT";
+    m1[11]="B_BISHOP";
+    m1[12]="B_ROOK";
+    m1[13]="B_QUEEN";
+    m1[14]="B_KING";
+    m1[15]="PIECE_NB";
 
-    // for(int x=0;x<64;x++){
-    //     s+= m1[pos.board[x]]+" ";
-    //     if((x+1)%8==0)
-    //     {
-    //         sync_cout<<s<<"\n"<<sync_endl;
-    //         s = "";
-    //     }
+    for(int x=0;x<64;x++){
+        s+= m1[pos.board[x]]+" ";
+        if((x+1)%8==0)
+        {
+            sync_cout<<s<<"\n"<<sync_endl;
+            s = "";
+        }
         
-    // }
-    // return 0;
+    }
+    freet++;
+
+    if(freet==2){
+        sync_cout << "iiiiiiiiiiiiii"<<sync_endl;
+
+        return 0;
+    }
 
     constexpr bool PvNode   = nodeType != NonPV;
     constexpr bool rootNode = nodeType == Root;
