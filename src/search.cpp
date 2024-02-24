@@ -610,7 +610,7 @@ Value Search::Worker::search(
             return alpha;
     }
     /*
-    important values for conditions // val
+    important values for conditions // value
 
     Value    bestValue, value, ttValue, eval, maxValue, probCutBeta;
     bool     givesCheck, improving, priorCapture;
