@@ -327,13 +327,13 @@ void Search::Worker::iterative_deepening() {
 
                 bestValue = search<Root>(rootPos, ss, alpha, beta, adjustedDepth, false);
                 sync_cout << "value: " << bestValue<< sync_endl;
-                if(bestValue == 0){
+                // if(bestValue == 0){
 
-                    sync_cout<<"Sleeping-----"<<sync_endl;
-                    std::this_thread::sleep_for(std::chrono::seconds(5));
+                //     sync_cout<<"Sleeping-----"<<sync_endl;
+                //     std::this_thread::sleep_for(std::chrono::seconds(5));
                     
-                    return ;
-                }
+                //     return ;
+                // }
                 /*
                 position startpos
                 position fen r2q1rk1/p2bbppp/Q7/2p1P2P/8/2p1B3/PPP2P1P/2KR3R w - - 0 17
@@ -610,10 +610,11 @@ Value Search::Worker::search(
     }
     freet++;
 
-    if(freet==2){
+    if(nodeType == Root){
         sync_cout << "iiiiiiiiiiiiii"<<sync_endl;
+        sync_cout<<"Sleeping-----"<<sync_endl;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
 
-        return 0;
     }
 
     constexpr bool PvNode   = nodeType != NonPV;
