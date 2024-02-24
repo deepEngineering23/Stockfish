@@ -577,7 +577,7 @@ Value Search::Worker::search(
         sync_cout << "Starting traversal after sleep"<<sync_endl;
         sync_cout<<"Sleeping-----"<<sync_endl;
         freet = 1;
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        //std::this_thread::sleep_for(std::chrono::seconds(1));
 
     }
 

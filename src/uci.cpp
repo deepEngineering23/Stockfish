@@ -237,6 +237,8 @@ void UCI::bench(Position& pos, std::istream& args, StateListPtr& states) {
         std::istringstream is(cmd);
         is >> std::skipws >> token;
 
+        sync_cout <<" FEN:: " << cmd << sync_endl;
+
         if (token == "go" || token == "eval")
         {
             std::cerr << "\nPosition: " << cnt++ << '/' << num << " (" << pos.fen() << ")"

@@ -150,7 +150,8 @@ std::vector<std::string> setup_bench(const Position& current, std::istream& is) 
     list.emplace_back("setoption name Hash value " + ttSize);
     list.emplace_back("ucinewgame");
 
-    for (const std::string& fen : fens)
+    for (const std::string& fen : fens){
+        sync_cout << fen << sync_endl;
         if (fen.find("setoption") != std::string::npos)
             list.emplace_back(fen);
         else
@@ -158,6 +159,7 @@ std::vector<std::string> setup_bench(const Position& current, std::istream& is) 
             list.emplace_back("position fen " + fen);
             list.emplace_back(go);
         }
+    }
 
     return list;
 }
